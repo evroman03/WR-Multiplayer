@@ -140,6 +140,8 @@ namespace FishNet.Managing.Server
                 return;
             }
             Objects.Spawn(nob, ownerConnection, scene);
+            print("SPAWNED");
+            print("SPAWNED");
         }
 
         /// <summary>

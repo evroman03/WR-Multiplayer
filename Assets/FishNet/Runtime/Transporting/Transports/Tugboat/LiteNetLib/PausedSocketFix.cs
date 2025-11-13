@@ -1,5 +1,6 @@
 ﻿#if UNITY_2018_3_OR_NEWER
 using System.Net;
+using UnityEngine;
 
 namespace LiteNetLib
 {
@@ -45,6 +46,7 @@ namespace LiteNetLib
                 if (_netManager.NotConnected == false)
                     return;
 
+                Debug.Log("PausedSocket");
                 // Socket isn't running but should be. Try to start again.
                 if (!_netManager.Start(_ipv4, _ipv6, _port, _manualMode))
                 {

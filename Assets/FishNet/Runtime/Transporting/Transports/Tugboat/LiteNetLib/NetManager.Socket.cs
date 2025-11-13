@@ -8,6 +8,8 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using LiteNetLib.Utils;
+using UnityEditor;
+using UnityEngine;
 
 namespace LiteNetLib
 {
@@ -129,6 +131,7 @@ namespace LiteNetLib
 
             while (IsRunning)
             {
+                Debug.Log("RUNNING");
                 try
                 {
                     if (socketV6 == null)

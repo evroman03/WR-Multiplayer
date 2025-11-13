@@ -464,7 +464,11 @@ namespace FishNet.Transporting.Tugboat
         public override bool StartConnection(bool server)
         {
             if (server)
+            {
+                print("started connection once");
                 return StartServer();
+            }
+
             else
                 return StartClient(_clientAddress);
         }

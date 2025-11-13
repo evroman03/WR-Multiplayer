@@ -183,10 +183,12 @@ namespace FishNet.Transporting.Tugboat.Server
             }
 
             NetManager.IPv6Enabled = _enableIPv6;
+            Debug.Log("Check bool started with " + _port);
             bool startResult = NetManager.Start(ipv4, ipv6, _port);
             //If started succcessfully.
             if (startResult)
             {
+                Transport.NetworkManager.LogError("SUCCESS");
                 LocalConnectionStates.Enqueue(LocalConnectionState.Started);
             }
             //Failed to start.

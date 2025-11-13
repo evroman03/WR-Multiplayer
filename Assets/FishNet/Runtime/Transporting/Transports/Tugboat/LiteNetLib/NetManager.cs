@@ -11,6 +11,7 @@ using System.Net.Sockets;
 using System.Threading;
 using LiteNetLib.Layers;
 using LiteNetLib.Utils;
+using UnityEngine;
 
 namespace LiteNetLib
 {
@@ -128,7 +129,7 @@ namespace LiteNetLib
         }
 
         private readonly List<IncomingData> _pingSimulationList = new();
-        private readonly Random _randomGenerator = new();
+        private readonly System.Random _randomGenerator = new();
         private const int MinLatencyThreshold = 5;
 #endif
         private Thread _logicThread;
@@ -1277,6 +1278,7 @@ namespace LiteNetLib
         {
             IPAddress ipv4 = NetUtils.ResolveAddress(addressIPv4);
             IPAddress ipv6 = NetUtils.ResolveAddress(addressIPv6);
+            //ignore
             return Start(ipv4, ipv6, port);
         }
 
@@ -1300,6 +1302,7 @@ namespace LiteNetLib
         /// <param name = "port">port to listen</param>
         public bool StartInManualMode(IPAddress addressIPv4, IPAddress addressIPv6, int port)
         {
+            UnityEngine.Debug.Log("Started manually" + port);
             return Start(addressIPv4, addressIPv6, port, true);
         }
 
