@@ -43,9 +43,6 @@ public class LanDiscoveryUI : MonoBehaviour
             await StartClientListener();
     }
 
-    // ============================================================
-    // SERVER: Broadcast Server Presence
-    // ============================================================
     private async Task StartServerBroadcast()
     {
         udp = new UdpClient();
@@ -64,7 +61,7 @@ public class LanDiscoveryUI : MonoBehaviour
                     new IPEndPoint(IPAddress.Broadcast, broadcastPort)
                 );
 
-                statusText.text = "Broadcasting...";
+                Debug.Log("Broadcasting...");
             }
             catch (Exception ex)
             {
@@ -75,12 +72,8 @@ public class LanDiscoveryUI : MonoBehaviour
         }
     }
 
-    // ============================================================
-    // CLIENT: Listen for Server Broadcasts
-    // ============================================================
     private async Task StartClientListener()
     {
-        // IMPORTANT FIXES:
         udp = new UdpClient();
         udp.EnableBroadcast = true;
 
@@ -118,10 +111,12 @@ public class LanDiscoveryUI : MonoBehaviour
             }
         }
     }
+    private void OnDestroy()
+    {
+        discovering = false;
 
-    // ============================================================
-    // JOIN BUTTON
-    // ============================================================
+        try { udp?.Close(); } catch { }
+    }
     public void OnJoinPressed()
     {
         if (string.IsNullOrEmpty(foundIP))
@@ -134,12 +129,5 @@ public class LanDiscoveryUI : MonoBehaviour
         statusText.text = "Connecting to " + foundIP + "...";
 
         networkManager.ClientManager.StartConnection();
-    }
-
-    private void OnDestroy()
-    {
-        discovering = false;
-
-        try { udp?.Close(); } catch { }
     }
 }
