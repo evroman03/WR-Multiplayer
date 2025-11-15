@@ -8,7 +8,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using FishNet.Transporting.Tugboat;
 using FishNet.Managing;
-using FishNet.Example;
 
 public class LanDiscoveryUI : MonoBehaviour
 {
@@ -20,116 +19,127 @@ public class LanDiscoveryUI : MonoBehaviour
 
     [Header("UI")]
     public TMP_Text statusText;
-    public Button connectButton;   // button in inspector
+    public Button connectButton;
 
     [Header("References")]
-    public Tugboat tugboat;        // drag your Tugboat transport here
+    public Tugboat tugboat;
     public NetworkManager networkManager;
-    public NetworkHudCanvases networkHudCanvas;
-    private bool discovering;
-    private string foundIP = null;
 
-    void Start()
+    private bool discovering;
+    private string foundIP;
+
+    private UdpClient udp;
+
+    async void Start()
     {
         statusText.text = isServer ? "Server Mode" : "Client Mode";
-
-        if (isServer)
-            _ = ServerBroadcastLoop();
-        else
-            _ = ClientListenLoop();
-
-        // Disable the button until a server is found
         connectButton.interactable = false;
-    }
-
-    // =====================================================
-    // SERVER BROADCAST
-    // =====================================================
-    private async Task ServerBroadcastLoop()
-    {
-        UdpClient sender = new UdpClient();
-        sender.EnableBroadcast = true;
 
         discovering = true;
+
+        if (isServer)
+            await StartServerBroadcast();
+        else
+            await StartClientListener();
+    }
+
+    // ============================================================
+    // SERVER: Broadcast Server Presence
+    // ============================================================
+    private async Task StartServerBroadcast()
+    {
+        udp = new UdpClient();
+        udp.EnableBroadcast = true;
 
         while (discovering)
         {
             try
             {
-                string msg = "SERVER:" + gamePort;
+                string msg = $"SERVER:{gamePort}";
                 byte[] data = Encoding.UTF8.GetBytes(msg);
 
-                await sender.SendAsync(data, data.Length,
-                    new IPEndPoint(IPAddress.Broadcast, broadcastPort));
+                await udp.SendAsync(
+                    data,
+                    data.Length,
+                    new IPEndPoint(IPAddress.Broadcast, broadcastPort)
+                );
 
                 statusText.text = "Broadcasting...";
-                Debug.Log("Broadcasting " + msg);
             }
             catch (Exception ex)
             {
-                statusText.text = "Broadcast error: " + ex.Message;
-                Debug.Log("Broadcast error: " + ex.Message);
+                Debug.LogError("LAN broadcast error: " + ex);
             }
 
             await Task.Delay((int)(broadcastInterval * 1000));
         }
-
-        sender.Close();
     }
 
-    // =====================================================
-    // CLIENT LISTEN
-    // =====================================================
-    private async Task ClientListenLoop()
+    // ============================================================
+    // CLIENT: Listen for Server Broadcasts
+    // ============================================================
+    private async Task StartClientListener()
     {
-        UdpClient listener = new UdpClient(broadcastPort);
-        discovering = true;
+        // IMPORTANT FIXES:
+        udp = new UdpClient();
+        udp.EnableBroadcast = true;
+
+        // Allows multiple listeners or mixed interface binding
+        udp.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+
+        // Bind to ANY IP, not a specific NIC
+        udp.Client.Bind(new IPEndPoint(IPAddress.Any, broadcastPort));
 
         while (discovering)
         {
             try
             {
-                UdpReceiveResult result = await listener.ReceiveAsync();
-                string msg = Encoding.UTF8.GetString(result.Buffer);
+                UdpReceiveResult res = await udp.ReceiveAsync();
+                string msg = Encoding.UTF8.GetString(res.Buffer);
 
                 if (msg.StartsWith("SERVER:"))
                 {
-                    string portStr = msg.Split(':')[1];
-                    foundIP = result.RemoteEndPoint.Address.ToString();
+                    string port = msg.Split(':')[1];
 
-                    statusText.text = $"Found server: {foundIP}:{portStr}";
+                    foundIP = res.RemoteEndPoint.Address.ToString();
+                    statusText.text = $"Found server: {foundIP}:{port}";
+
                     connectButton.interactable = true;
                 }
             }
-            catch
+            catch (ObjectDisposedException)
             {
-                // socket closed
+                // socket closed intentionally
                 break;
             }
+            catch (Exception ex)
+            {
+                Debug.LogError("LAN listen error: " + ex);
+            }
         }
-
-        listener.Close();
     }
 
-    // =====================================================
-    // BUTTON: TRY CONNECT
-    // =====================================================
+    // ============================================================
+    // JOIN BUTTON
+    // ============================================================
     public void OnJoinPressed()
     {
-        if (foundIP == null)
+        if (string.IsNullOrEmpty(foundIP))
         {
-            statusText.text = "No server found yet.";
+            statusText.text = "No server found.";
             return;
         }
 
-        statusText.text = "Connecting to " + foundIP + "...";
         tugboat.SetClientAddress(foundIP);
-        networkHudCanvas.OnClick_Client();
+        statusText.text = "Connecting to " + foundIP + "...";
 
+        networkManager.ClientManager.StartConnection();
     }
 
-    void OnDestroy()
+    private void OnDestroy()
     {
         discovering = false;
+
+        try { udp?.Close(); } catch { }
     }
 }

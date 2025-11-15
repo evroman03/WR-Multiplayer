@@ -927,7 +927,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91a65992205345e4cacbc1ae31bdda84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isServer: 0
+  isServer: 1
   broadcastPort: 47777
   gamePort: 7770
   broadcastInterval: 2
@@ -935,7 +935,6 @@ MonoBehaviour:
   connectButton: {fileID: 1128828184}
   tugboat: {fileID: 1903680412}
   networkManager: {fileID: 1903680415}
-  networkHudCanvas: {fileID: 1903680416}
 --- !u!114 &1903680415 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7443408887813606050, guid: 0b650fca685f2eb41a86538aa883e4c1, type: 3}
@@ -945,17 +944,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2c95dfde7d73b54dbbdc23155d35d36, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1903680416 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4393252310584637056, guid: 0b650fca685f2eb41a86538aa883e4c1, type: 3}
-  m_PrefabInstance: {fileID: 1903680410}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d3606bfdac5a4743890fc1a5ecd8f24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
