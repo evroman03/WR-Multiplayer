@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>EOS Redirect</title>
+  <script>
+    // Forward any query string to the custom scheme so Unity receives ?code=...
+    (function() {
+      const qs = window.location.search || "";
+      // Change this to the exact scheme Unity expects:
+      const target = "eosauth://localhost/redirect" + qs;
+      // Try immediate redirect
+      window.location.replace(target);
+      // Fallback message
+      document.write("Redirecting to app... If nothing happens, click <a id='link' href='" + target + "'>this link</a>.");
+    })();
+  </script>
+</head>
+<body></body>
+</html>
