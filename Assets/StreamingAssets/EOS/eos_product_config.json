@@ -1,12 +1,38 @@
 {
-  "ProductName": null,
-  "ProductId": "00000000000000000000000000000000",
-  "ProductVersion": null,
+  "ProductName": "Continent Gambler",
+  "ProductId": "3b9e52698d8443f3af460b992d87caa6",
+  "ProductVersion": "1",
   "imported": true,
-  "Clients": [],
+  "Clients": [
+    {
+      "Value": {
+        "ClientId": "xyza78919RztDx623fcQR9PzrfK8U6iV",
+        "ClientSecret": "WL4zqIy+/4mpDnvJDgk+Fx+dIara1m+jgyXa5RSxzk8",
+        "EncryptionKey": "4456AEEBC9087A5CA02A08302B98BE11EDD8634B7E1A904B764BE91D805114D6"
+      },
+      "Name": "Client"
+    }
+  ],
   "Environments": {
-    "Deployments": [],
-    "Sandboxes": []
+    "Deployments": [
+      {
+        "Value": {
+          "SandboxId": {
+            "Value": "16568966a14242b2b81cf05889127e3e"
+          },
+          "DeploymentId": "5ad492a1df714bd5b135b1c2d1ccd356"
+        },
+        "Name": "Deployment"
+      }
+    ],
+    "Sandboxes": [
+      {
+        "Value": {
+          "Value": "16568966a14242b2b81cf05889127e3e"
+        },
+        "Name": "Sandbox"
+      }
+    ]
   },
   "schemaVersion": "1.0"
 }

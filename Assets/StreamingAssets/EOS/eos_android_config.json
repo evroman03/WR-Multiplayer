@@ -1,4 +1,6 @@
 {
+  "GoogleLoginClientID": null,
+  "GoogleLoginNonce": null,
   "deployment": {
     "SandboxId": {
       "Value": "16568966a14242b2b81cf05889127e3e"
@@ -12,10 +14,10 @@
   },
   "isServer": false,
   "platformOptionsFlags": "None",
-  "authScopeOptionsFlags": "BasicProfile, FriendsList, Presence",
-  "integratedPlatformManagementFlags": "Disabled",
-  "tickBudgetInMilliseconds": 10,
-  "taskNetworkTimeoutSeconds": 3.0,
+  "authScopeOptionsFlags": "NoFlags",
+  "integratedPlatformManagementFlags": 0,
+  "tickBudgetInMilliseconds": 0,
+  "taskNetworkTimeoutSeconds": 0.0,
   "threadAffinity": {
     "NetworkWork": 0,
     "StorageIo": 0,
